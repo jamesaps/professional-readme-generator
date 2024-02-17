@@ -1,4 +1,4 @@
-import fs from "fs";
+import { promises as fs } from "fs";
 import path from "path";
 import inquirer from "inquirer";
 
@@ -99,13 +99,15 @@ const questions = [
 ];
 
 // function to write README file
-function writeToFile(fileName, data) {}
+async function writeToFile(fileName, data) {
+  await fs.writeFile(fileName, data);
+}
 
 // function to initialize program
 async function init() {
   const readmeSections = await generateReadmeSectionsFromQuestions();
 
-  console.log(readmeSections);
+  await writeToFile("generated-README.md", readmeSections);
 }
 
 // function to create readme sections from the answers provided from questions asked
