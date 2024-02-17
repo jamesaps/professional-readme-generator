@@ -18,6 +18,9 @@ function generateMarkdown(data) {
   }
 
   switch (data.type) {
+    case "title":
+      // titles have no content (only headings as generated above)
+      break;
     case "badge":
       markdown += `[![${data.name}](${data.choice.image})](${data.choice.url})\n`;
       break;
