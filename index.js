@@ -107,7 +107,7 @@ async function writeToFile(fileName, data) {
 async function init() {
   const readmeSections = await generateReadmeSectionsFromQuestions();
 
-  await writeToFile("generated-README.md", readmeSections);
+  await writeToFile("README.md", readmeSections);
 }
 
 // function to create readme sections from the answers provided from questions asked
