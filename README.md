@@ -6,9 +6,7 @@
 
 Professional README Generator is a command line README generation tool built in JavaScript. It presents users with a series of questions to aid them in generating a tailored and highly customizable README files. All sections are optional, allowing users to create README files that only contain essential and relative information for their project. Users can provide details like their GitHub username and email address to include automatically generated links to reach them.
 
-Project video:
-https://app.screencastify.com/v3/watch/s65tmhNY7MDI4Zt2j96I
-https://github.com/jamesaps/professional-readme-generator/assets/10295321/a56a8ff3-07e9-41a0-979f-2f8d3d5796f5
+[Video Demonstration](https://drive.google.com/file/d/1LXvWMVIimZTMLBY0tlOTsd4kCVaAQHH7/view?usp=share_link)
 
 
 
