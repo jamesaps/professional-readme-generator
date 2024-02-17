@@ -225,7 +225,9 @@ async function generateReadmeSectionsFromQuestions() {
           continue;
         }
 
-        const tableOfContentsSections = sections.map((section) => section.name);
+        const tableOfContentsSections = sections
+          .filter((section) => !["Title", "License"].includes(section.name))
+          .map((section) => section.name);
 
         answer = await inquirer.prompt({
           type: "list",

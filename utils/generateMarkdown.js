@@ -6,14 +6,14 @@ function generateMarkdown(data) {
   switch (data.type) {
     // titles use a H1 tag
     case "title":
-      markdown += `# ${data.content} {#${convertStringToId(data.name)}}\n`;
+      markdown += `# ${data.content}\n`;
       break;
     case "badge":
       // badges have no heading
       break;
     // all other sections use a H2 tag
     default:
-      markdown += `## ${data.name} {#${convertStringToId(data.name)}}\n\n`;
+      markdown += `## ${data.name}\n\n`;
       break;
   }
 
