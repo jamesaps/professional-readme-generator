@@ -8,7 +8,9 @@ Professional README Generator is a command line README generation tool built in 
 
 Project video:
 https://app.screencastify.com/v3/watch/s65tmhNY7MDI4Zt2j96I
-[video-demonstration.webm](https://github.com/jamesaps/professional-readme-generator/assets/10295321/355fc4a0-174b-47a6-b479-3e97d7f8196a)
+https://github.com/jamesaps/professional-readme-generator/assets/10295321/a56a8ff3-07e9-41a0-979f-2f8d3d5796f5
+
+
 
 ## Table of Contents
 
