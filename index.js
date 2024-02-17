@@ -103,13 +103,43 @@ async function generateReadmeSectionsFromQuestions() {
         ) {
           listItems.push(answer);
         }
+
+        if (listItems.length === 0) {
+          console.log(
+            `No values were provided to generate a ${question.name} section`
+          );
+          continue;
+        }
+
+        section.markdown = generateMarkdown({
+          type: "list",
+          name: question.name,
+          listItems,
+        });
+
+        sections.push(section);
         break;
       case questionTypes.tableOfContents:
+        if (sections.length === 0) {
+          console.log(
+            `There are no sections in your README to generate a ${question.name}`
+          );
+          continue;
+        }
+
+        const tableOfContentsSections = sections.map((section) => section.name);
+
         answer = await inquirer.prompt({
           type: "list",
           name: "answer",
           message: `Please select the section you want the ${question.name} to appear before`,
-          choices: [...sections.map((section) => section.name), "[END]"],
+          choices: [...tableOfContentsSections, "[END]"],
+        });
+
+        section.markdown = generateMarkdown({
+          type: "table-of-contents",
+          name: question.name,
+          sections: tableOfContentsSections,
         });
 
         if (answer.answer === "[END]") {
@@ -150,6 +180,8 @@ async function generateReadmeSectionsFromQuestions() {
         break;
     }
   }
+
+  return sections.map((section) => section.markdown).join("\n");
 }
 
 // function to ask user a question
