@@ -37,18 +37,18 @@ const questions = [
     choices: [
       {
         name: "Apache 2.0",
-        image:
-          "https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0",
+        image: "https://img.shields.io/badge/License-Apache_2.0-blue.svg",
+        url: "https://opensource.org/licenses/Apache-2.0",
       },
       {
         name: "MIT",
-        image:
-          "https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT",
+        image: "https://img.shields.io/badge/License-MIT-yellow.svg",
+        url: "https://opensource.org/licenses/MIT",
       },
       {
         name: "Unlicense",
-        image:
-          "https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/",
+        image: "https://img.shields.io/badge/license-Unlicense-blue.svg",
+        url: "http://unlicense.org/",
       },
     ],
   },
@@ -85,8 +85,10 @@ const questions = [
 function writeToFile(fileName, data) {}
 
 // function to initialize program
-function init() {
-  const readmeSections = generateReadmeSectionsFromQuestions();
+async function init() {
+  const readmeSections = await generateReadmeSectionsFromQuestions();
+
+  console.log(readmeSections);
 }
 
 // function to create readme sections from the answers provided from questions asked
@@ -121,7 +123,7 @@ async function generateReadmeSectionsFromQuestions() {
         section.markdown = generateMarkdown({
           type: question.optionType,
           name: question.name,
-          content: choice,
+          choice,
         });
 
         if (question.name === "License") {

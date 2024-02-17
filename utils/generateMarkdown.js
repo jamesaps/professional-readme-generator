@@ -8,6 +8,9 @@ function generateMarkdown(data) {
     case "title":
       markdown += `# ${data.content} {#${convertStringToId(data.name)}}\n`;
       break;
+    case "badge":
+      // badges have no heading
+      break;
     // all other sections use a H2 tag
     default:
       markdown += `## ${data.name} {#${convertStringToId(data.name)}}\n\n`;
@@ -15,6 +18,9 @@ function generateMarkdown(data) {
   }
 
   switch (data.type) {
+    case "badge":
+      markdown += `[![${data.name}](${data.choice.image})](${data.choice.url})\n`;
+      break;
     case "list":
       for (const listItem of data.listItems) {
         markdown += ` - ${listItem}\n`;
