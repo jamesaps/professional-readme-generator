@@ -9,6 +9,7 @@ const questionTypes = {
   default: 1,
   list: 2,
   tableOfContents: 3,
+  options: 4,
 };
 
 // array of questions for user
@@ -31,7 +32,25 @@ const questions = [
   {
     question: "Please provide license details for this project",
     name: "License",
-    type: questionTypes.default,
+    type: questionTypes.options,
+    optionType: "badge",
+    choices: [
+      {
+        name: "Apache 2.0",
+        image:
+          "https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0",
+      },
+      {
+        name: "MIT",
+        image:
+          "https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT",
+      },
+      {
+        name: "Unlicense",
+        image:
+          "https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/",
+      },
+    ],
   },
   {
     question: "Please provide contribution details for this project",
@@ -90,6 +109,27 @@ async function generateReadmeSectionsFromQuestions() {
     }
 
     switch (question.type) {
+      case questionTypes.options:
+        answer = await askQuestion(question.question, "options", {
+          choices: question.choices.map((choice) => choice.name),
+        });
+
+        const choice = question.choices.find(
+          (choice) => choice.name === answer
+        );
+
+        section.markdown = generateMarkdown({
+          type: question.optionType,
+          name: question.name,
+          content: choice,
+        });
+
+        if (question.name === "License") {
+          sections.unshift(section);
+        } else {
+          sections.push(section);
+        }
+        break;
       case questionTypes.list:
         const listItems = [];
 
@@ -185,14 +225,25 @@ async function generateReadmeSectionsFromQuestions() {
 }
 
 // function to ask user a question
-async function askQuestion(question) {
-  const response = await inquirer.prompt({
-    type: "input",
-    name: "answer",
-    message: question,
-  });
+async function askQuestion(question, type = "default", options = {}) {
+  if (type === "default") {
+    const response = await inquirer.prompt({
+      type: "input",
+      name: "answer",
+      message: question,
+    });
 
-  return response.answer;
+    return response.answer;
+  } else if (type === "options") {
+    const response = await inquirer.prompt({
+      type: "list",
+      name: "answer",
+      message: question,
+      choices: options.choices,
+    });
+
+    return response.answer;
+  }
 }
 
 // function call to initialize program
