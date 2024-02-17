@@ -31,7 +31,7 @@ function generateMarkdown(data) {
       break;
     case "table-of-contents":
       for (const section of data.sections) {
-        markdown += `\t * [${section}](#${convertStringToId(section)})\n`;
+        markdown += ` * [${section}](#${convertStringToId(section)})\n`;
       }
       break;
     case "default":
