@@ -1,7 +1,8 @@
-const fs = require("fs");
-const path = require('path');
-const inquirer = require("inquirer");
-const generateMarkdown = require("./utils/generateMarkdown");
+import fs from "fs";
+import path from "path";
+import inquirer from "inquirer";
+
+import generateMarkdown from "./utils/generateMarkdown.js";
 
 // array of questions for user
 const questions = [
