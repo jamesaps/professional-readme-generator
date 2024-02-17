@@ -10,10 +10,22 @@ const questionTypes = {
   list: 2,
   tableOfContents: 3,
   options: 4,
+  context: 5,
+  contextDependent: 6,
 };
 
 // array of questions for user
 const questions = [
+  {
+    question: "Please provide your GitHub username or leave blank to ignore",
+    name: "github-username",
+    type: questionTypes.context,
+  },
+  {
+    question: "Please provide your email or leave blank to ignore",
+    name: "email",
+    type: questionTypes.context,
+  },
   {
     question: "Please provide the title for this project",
     name: "Title",
@@ -65,7 +77,12 @@ const questions = [
   {
     question: "Please provide question details for this project",
     name: "Questions",
-    type: questionTypes.default,
+    type: questionTypes.contextDependent,
+    contextDependentsDetails: {
+      "github-username":
+        "My GitHub username is [{placeholder}](https://github.com/{placeholder}).",
+      email: "You can email me at [{placeholder}](mailto:{placeholder}).",
+    },
   },
   {
     question: "Please provide details of the features for this project",
@@ -94,23 +111,60 @@ async function init() {
 // function to create readme sections from the answers provided from questions asked
 async function generateReadmeSectionsFromQuestions() {
   const sections = [];
+  const context = {};
 
   // loop through questions
   for (const question of questions) {
     const section = { name: question.name };
     let answer;
 
-    const includeSection = await inquirer.prompt({
-      type: "confirm",
-      name: "answer",
-      message: `Would you like the README to have a ${question.name} section?`,
-    });
+    if (question.type !== questionTypes.context) {
+      const includeSection = await inquirer.prompt({
+        type: "confirm",
+        name: "answer",
+        message: `Would you like the README to have a ${question.name} section?`,
+      });
 
-    if (!includeSection.answer) {
-      continue;
+      if (!includeSection.answer) {
+        continue;
+      }
     }
 
     switch (question.type) {
+      case questionTypes.contextDependent:
+        // sections that are dependent on previously retrieved data
+
+        answer = await askQuestion(question.question);
+
+        for (const [dependent, details] of Object.entries(
+          question.contextDependentsDetails
+        )) {
+          const contextValue = context[dependent];
+
+          if (contextValue !== undefined) {
+            // if answer is not empty add a space between pre-existing value, otherwise don't
+            answer += answer.length > 0 ? " " : "";
+            // replace placeholder values with context values
+            answer += details.replaceAll("{placeholder}", contextValue);
+          }
+        }
+
+        section.markdown = generateMarkdown({
+          type: "default",
+          name: question.name,
+          content: answer,
+        });
+
+        sections.push(section);
+        break;
+      case questionTypes.context:
+        answer = await askQuestion(question.question);
+
+        if (answer !== "") {
+          context[question.name] = answer;
+        }
+
+        break;
       case questionTypes.options:
         answer = await askQuestion(question.question, "options", {
           choices: question.choices.map((choice) => choice.name),
